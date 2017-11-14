@@ -8,6 +8,7 @@ public class Main {
 		System.out.print("Second word: ");
 		String second = sc.nextLine();
 		Demaru d = new Demaru();
+		d.doDemaru(first, second);
 	}
 
 }
