@@ -7,33 +7,36 @@ public class Damerau{
 	private int[][] damerauMatrix; 		
 	private Boolean isChecked = false;	// for monitoring threads
 	
+	private int m, n;
+	
 	public Damerau(String first, String second){
 		if ((first.length() > 0 || !first.isEmpty())  || 
 			(second.length() > 0 || !second.isEmpty()))
 	        {
 				this.first = first;
 				this.second = second;
+				this.m = first.length();
+				this.n = second.length();
 	        }
 	}
 	
 	private void displayMatrix()
     {
-        System.out.println("  "+compOne);
-        for (int y = 0; y <= compTwo.length(); y++)
-        {
-            if (y-1 < 0) System.out.print(" "); else System.out.print(compTwo.charAt(y-1));
-            for (int x = 0; x <= compOne.length(); x++)
-            {
-                System.out.print(matrix[x][y]);
+        System.out.println("  " + first);
+        for (int y = 0; y <= n; y++){
+            if (y-1 < 0) System.out.print(" "); 
+            else System.out.print(second.charAt(y-1));
+            
+            for (int x = 0; x <= m; x++){
+                System.out.print(damerauMatrix[x][y]);
             }
             System.out.println();
         }
     }
-	 
+	
+	// to be commented out //
 	private void OASDamerau()
     {
-		int m = first.length();
-		int n = second.length();
         int cost = 1;
         int deletionScore,
         	subtractionScore, 
@@ -79,47 +82,62 @@ public class Damerau{
         System.out.println("distance: " + damerauMatrix[m][n]);
         displayMatrix();
     }
-	
-	 int res = -1;
-     int INF = compOne.length() + compTwo.length();
 
-     matrix = new int[compOne.length()+1][compTwo.length()+1];
-
-     for (int i = 0; i < compOne.length(); i++)
-     {
-         matrix[i+1][1] = i;
-         matrix[i+1][0] = INF;
-     }
-
-     for (int i = 0; i < compTwo.length(); i++)
-     {
-         matrix[1][i+1] = i;
-         matrix[0][i+1] = INF;
-     }
-
-     int[] DA = new int[24];
-
-     for (int i = 0; i < 24; i++)
-     {
-         DA[i] = 0;
-     }
-
-     for (int i = 1; i < compOne.length(); i++)
-     {
-         int db = 0;
-
-         for (int j = 1; j < compTwo.length(); j++)
-         {
-
-             int i1 = DA[compTwo.indexOf(compTwo.charAt(j-1))];
-             int j1 = db;
-             int d = ((compOne.charAt(i-1)==compTwo.charAt(j-1))?0:1);
-             if (d == 0) db = j;
-
-             matrix[i+1][j+1] = Math.min(Math.min(matrix[i][j]+d, matrix[i+1][j]+1),Math.min(matrix[i][j+1]+1,matrix[i1][j1]+(i - i1-1)+1+(j-j1-1)));
-         }
-         DA[compOne.indexOf(compOne.charAt(i-1))] = i;
-     }
-      
-     return matrix[compOne.length()][compTwo.length()];
+	public int DHDamerau()
+	{
+		 int INF = m+n;
+		 int deletionScore,
+			 	subtractionScore, 
+			 	insertionScore,
+			 	transpositionScore;
+		
+		 damerauMatrix = new int[m+1][n+1];
+		
+		 // initialize d
+		 for (int i = 0; i < m; i++){
+			 damerauMatrix[i+1][1] = i;
+			 damerauMatrix[i+1][0] = INF;
+		 }
+		
+		 for (int i = 0; i < n; i++){
+			 damerauMatrix[1][i+1] = i;
+			 damerauMatrix[0][i+1] = INF;
+		 }
+		
+		 int[] DA = new int[24];
+		
+		 for (int i = 0; i < 24; i++){
+		     DA[i] = 0;
+		 }
+		
+		 for (int i = 1; i < m; i++){
+		     int db = 0;
+		
+		     for (int j = 1; j < n; j++)
+		     {
+		
+		         int i1 = DA[second.indexOf(second.charAt(j-1))];
+		         int j1 = db;
+		         
+		         int d = ((first.charAt(i-1) == first.charAt(j-1)) ? 0 : 1);
+		         if (d == 0) db = j;
+		         
+		         deletionScore = damerauMatrix[i][j]+d;
+		         insertionScore = damerauMatrix[i+1][j]+1;
+		         subtractionScore = damerauMatrix[i][j+1]+1;
+		         transpositionScore = damerauMatrix[i1][j1]+(i-i1-1)+1+(j-j1-1);
+		
+		         damerauMatrix[i+1][j+1] = Math.min(Math.min(deletionScore, 
+		        		 									 insertionScore),
+		        		 					   		Math.min(subtractionScore,
+		        		 					   				 transpositionScore));
+		     }
+		     DA[first.indexOf(first.charAt(i-1))] = i;
+		 }
+		  
+		 isChecked = true;
+		 displayMatrix();
+		 
+	     return damerauMatrix[m][n];
+	}
 }
