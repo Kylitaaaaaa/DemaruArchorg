@@ -7,8 +7,17 @@ public class Main {
 		String first = sc.nextLine();
 		System.out.print("Second word: ");
 		String second = sc.nextLine();
-		Demaru d = new Demaru();
-		d.doDemaru(first, second);
+		
+		Damerau d2 = new Damerau(first, second);
+		d2.OASDamerau();
+		
+		Damerau d1 = new Damerau(first, second);
+		d1.tryThread();
+		
+		
+		
+//		d.OASDamerau();
+//		d.DHDamerau();
 	}
 
 }
