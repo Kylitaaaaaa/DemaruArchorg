@@ -3,16 +3,16 @@ import java.util.List;
 
 public class Damerau{
 	
-	 String 	first;				// source string
-	public String 	second;				// comparing string
-	public int[][] damerauMatrix; 		
-	public Boolean isChecked = false;	// for monitoring threads
+	public static String 	first;				// source string
+	public static  String 	second;				// comparing string
+	public static  int[][] damerauMatrix; 		
+	public static  Boolean isChecked = false;	// for monitoring threads
 	
-	public int m, n;
-	public ArrayList<Character> alphabet = new ArrayList<Character>();
+	public static  int m, n;
+	public static  ArrayList<Character> alphabet = new ArrayList<Character>();
 	public static ArrayList<Integer> alphaNum = new ArrayList<Integer>();
 	
-	static int [][] d;
+	public static  int [][] d;
 	
 	
 	public Damerau(String first, String second){
@@ -43,6 +43,12 @@ public class Damerau{
 				alphaNum.add(0);
 			}
 		
+		System.out.println("alphanum size: " + alphaNum.size());
+		
+		for(int i=0; i<alphaNum.size(); i++)
+			alphaNum.set(i, 0);
+		
+		
 		d = new int [m+1][n+1];
 		
 		for (int i = 0; i <= m; i++) 
@@ -50,6 +56,23 @@ public class Damerau{
 		
 		for (int i = 0; i <= n; i++) 
 		    d[0][i] = i;
+		
+		displayMatrixD();
+		System.out.println("\n");
+		printAlphabet();
+		printAlphabetNum();
+	}
+	
+	public void printAlphabet(){
+		System.out.println("printing alphabet");
+		for(int i=0; i<alphabet.size(); i++)
+			System.out.print(alphabet.get(i) + "\t");
+	}
+	
+	public void printAlphabetNum(){
+		System.out.println("printing alphanum");
+		for(int i=0; i<alphaNum.size(); i++)
+			System.out.println(alphaNum.get(i));
 	}
 	
 	private void displayMatrix()
@@ -61,6 +84,20 @@ public class Damerau{
             
             for (int x = 0; x <= m; x++){
                 System.out.print(damerauMatrix[x][y]);
+            }
+            System.out.println();
+        }
+    }
+	
+	static void displayMatrixD()
+    {
+        System.out.println("  " + first);
+        for (int y = 0; y <= n; y++){
+            if (y-1 < 0) System.out.print(" "); 
+            else System.out.print(second.charAt(y-1));
+            
+            for (int x = 0; x <= m; x++){
+                System.out.print(d[x][y]);
             }
             System.out.println();
         }
@@ -145,12 +182,15 @@ public class Damerau{
 		      }
 		    }
 		    alphaNum.set(alphabet.indexOf(first.charAt(i-1)), i);
+		    
+		    System.out.println("i : " + i);
+		    displayMatrixD();
 		  }
 		
 		System.out.println("distance: " + d[m][n]);
+		System.out.println("done \n\n\n");
 		
-		damerauMatrix = d;
-		displayMatrix();
+		displayMatrixD();
     }
 	
 	public void tryThread(){
@@ -164,11 +204,13 @@ public class Damerau{
 		
 		List <Thread> tList = new ArrayList <Thread> ();
 		for (int i = 1; i <= m; i++) {
+			//Thread t = new Thread(new DamerauThread(i), "i : " + i);
 			Thread t = new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i);
 			tList.add(t);
 			t.start();
 			
 		}
+		
 		
 		System.out.println("distance: " + d[m][n]);
 		
@@ -177,14 +219,13 @@ public class Damerau{
 				if(!tList.get(i).isAlive()){
 					System.out.println("\nTarget : " + i);
 					tList.remove(i);
-					damerauMatrix = d;
-					displayMatrix();
+					displayMatrixD();
 				}
 		}
 		if(tList.size() ==0){
-			damerauMatrix = d;
-			displayMatrix();
+			displayMatrixD();
 		}
+		
 	}
 	
 	public void tryThread2(){

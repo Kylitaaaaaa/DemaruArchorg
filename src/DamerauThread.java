@@ -1,12 +1,15 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class DamerauThread implements Runnable{
+	
 	private int n;
 	private ArrayList<Integer> alphaNum;
 	private ArrayList<Character> alphabet;
 	private String first;
 	private String second;
 	private int i;
+	private int j;
 	private int db;
 	private int d[][];
 	
@@ -27,8 +30,6 @@ public class DamerauThread implements Runnable{
 		this.d = d;
 		
 	}
-			
-	
 	
 	
 	@Override
@@ -36,7 +37,7 @@ public class DamerauThread implements Runnable{
 		Thread thread = Thread.currentThread();
 		String name = thread.getName();
 		
-		db = 0;
+		int db = 0;
 	    for (int j = 1; j <= n; j++) {
 	      int i1 = alphaNum.get(alphabet.indexOf(second.charAt(j-1)));
 	      
@@ -48,6 +49,7 @@ public class DamerauThread implements Runnable{
 	      } else {
 	        cost = 1;
 	      }
+	      
 	      Damerau.updateD(i, j, (Math.min(d[i][j-1] + 1, Math.min(d[i-1][j] + 1, d[i-1][j-1] + cost))));
     	  d[i][j] = Math.min(d[i][j-1] + 1,                 // insertion
                   Math.min(d[i-1][j] + 1,        // deletion
@@ -60,8 +62,14 @@ public class DamerauThread implements Runnable{
 	      
 	    }
 	    
-	    Damerau.setAlphaNum(alphabet.indexOf(first.charAt(i-1)), i);
+	    Damerau.setAlphaNum(Damerau.alphabet.indexOf(Damerau.first.charAt(i-1)), i);
+	    //alphaNum.set(Damerau.alphabet.indexOf(Damerau.first.charAt(i-1)), i);
 	    System.out.println("Done " + name);
+	    //Damerau.displayMatrixD();
+	}
+	
+	public void updateD(int i, int j, int val){
+		Damerau.d[i][j] = val;
 	}
 
 }

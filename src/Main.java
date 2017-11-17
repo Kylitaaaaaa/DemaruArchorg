@@ -12,6 +12,7 @@ public class Main {
 		d2.OASDamerau();
 		
 		Damerau d1 = new Damerau(first, second);
+		//d1.OASDamerau();
 		d1.tryThread();
 		
 		
