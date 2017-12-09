@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Damerau{
 	
@@ -77,6 +83,7 @@ public class Damerau{
 	
 	private void displayMatrix()
     {
+		
         System.out.println("  " + first);
         for (int y = 0; y <= n; y++){
             if (y-1 < 0) System.out.print(" "); 
@@ -101,6 +108,26 @@ public class Damerau{
             }
             System.out.println();
         }
+    }
+	
+	static void displayMatrixD(String name)
+    {
+		String temp = "";
+        for (int y = 0; y <= n; y++){
+            if (y-1 < 0) 
+            	temp = temp + "\t";
+            else 
+            	temp = temp + second.charAt(y-1) + "";
+            
+            for (int x = 0; x <= m; x++){
+            	temp = temp + d[x][y] + "";
+            }
+            temp = temp + "\n";
+//            System.out.println();
+        }
+        JFrame parent = new JFrame();
+        parent.setVisible(true);
+        JOptionPane.showMessageDialog(parent, temp, name,  JOptionPane.PLAIN_MESSAGE);
     }
 	
 	// to be commented out //
@@ -202,6 +229,7 @@ public class Damerau{
 //		t2.start();
 //		t3.start();
 		
+		/*
 		List <Thread> tList = new ArrayList <Thread> ();
 		for (int i = 1; i <= m; i++) {
 			//Thread t = new Thread(new DamerauThread(i), "i : " + i);
@@ -211,8 +239,6 @@ public class Damerau{
 			
 		}
 		
-		
-		System.out.println("distance: " + d[m][n]);
 		
 		while(tList.size() != 0){
 			for(int i=0; i<tList.size(); i++)
@@ -226,6 +252,25 @@ public class Damerau{
 			displayMatrixD();
 		}
 		
+		*/
+		
+		
+		
+		ExecutorService es = Executors.newCachedThreadPool();
+		for(int i = 1; i <= m; i++){
+		    es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i));
+		}
+		es.shutdown();
+		try {
+			boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		displayMatrixD();
+		System.out.println("distance: " + d[m][n]);
+	
 	}
 	
 	public void tryThread2(){
@@ -329,6 +374,16 @@ public class Damerau{
 		 
 	     return damerauMatrix[m][n];
 	}
+
+	public static int[][] getDamerauMatrix() {
+		return damerauMatrix;
+	}
+
+	public static void setDamerauMatrix(int[][] damerauMatrix) {
+		Damerau.damerauMatrix = damerauMatrix;
+	}
+	
+	
 	
 	
 }

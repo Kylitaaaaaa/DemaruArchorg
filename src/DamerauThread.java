@@ -66,6 +66,8 @@ public class DamerauThread implements Runnable{
 	    //alphaNum.set(Damerau.alphabet.indexOf(Damerau.first.charAt(i-1)), i);
 	    System.out.println("Done " + name);
 	    //Damerau.displayMatrixD();
+	    Damerau.displayMatrixD(name);
+	    System.out.println("Done print " + name);
 	}
 	
 	public void updateD(int i, int j, int val){
