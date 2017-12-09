@@ -9,14 +9,14 @@ import javax.swing.JOptionPane;
 
 public class Damerau{
 	
-	public static String 	first;				// source string
+	public static  String 	first;				// source string
 	public static  String 	second;				// comparing string
 	public static  int[][] damerauMatrix; 		
 	public static  Boolean isChecked = false;	// for monitoring threads
 	
 	public static  int m, n;
 	public static  ArrayList<Character> alphabet = new ArrayList<Character>();
-	public static ArrayList<Integer> alphaNum = new ArrayList<Integer>();
+	public static  ArrayList<Integer> alphaNum = new ArrayList<Integer>();
 	
 	public static  int [][] d;
 	
@@ -179,11 +179,7 @@ public class Damerau{
         System.out.println("distance: " + damerauMatrix[m][n]);
         displayMatrix();
         
-        */
-		
-		
-		
-		
+        */		
 		//initialize d
 		
 		
