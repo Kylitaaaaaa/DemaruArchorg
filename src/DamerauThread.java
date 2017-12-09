@@ -13,6 +13,17 @@ public class DamerauThread implements Runnable{
 	private int db;
 	private int d[][];
 	
+	//for backtracking hopefully
+	private Boolean isDeletion = false;
+	private Boolean isInsertion = false;
+	private Boolean isSubstitution = false;
+	private Boolean isTransposition = false;	
+	
+	private int deletionScore = 0;
+	private int insertionScore = 0;
+	private int substitutionScore = 0;
+	private int transpositionScore = 0;
+	
 	public DamerauThread(int n,
 						ArrayList<Integer> alphaNum, 
 						ArrayList<Character> alphabet,
@@ -30,7 +41,6 @@ public class DamerauThread implements Runnable{
 		this.d = d;
 		
 	}
-	
 	
 	@Override
 	public void run() {
@@ -50,15 +60,26 @@ public class DamerauThread implements Runnable{
 	        cost = 1;
 	      }
 	      
+	      insertionScore = d[i][j-1] + 1;
+	      deletionScore = d[i-1][j] + 1;
+	      substitutionScore = d[i-1][j-1] + cost;
+	      transpositionScore = d[i1-1][j1-1] + (i-i1-1) + (j-j1-1) + 1;
+	      
 	      Damerau.updateD(i, j, (Math.min(d[i][j-1] + 1, Math.min(d[i-1][j] + 1, d[i-1][j-1] + cost))));
-    	  d[i][j] = Math.min(d[i][j-1] + 1,                 // insertion
-                  Math.min(d[i-1][j] + 1,        // deletion
-                           d[i-1][j-1] + cost)); // substitution
+    	  d[i][j] = Math.min(d[i][j-1] + 1,        // insertion
+                    Math.min(d[i-1][j] + 1,        // deletion
+                           d[i-1][j-1] + cost));   // substitution
     	  
 	      if(i1 > 0 && j1 > 0) {
 	    	  Damerau.updateD(i, j, (Math.min(d[i][j], d[i1-1][j1-1] + (i-i1-1) + (j-j1-1) + 1))); //transposition
 	    	  d[i][j] = Math.min(d[i][j], d[i1-1][j1-1] + (i-i1-1) + (j-j1-1) + 1); //transposition
 	      }
+	      
+	      //for backtracking hopefully
+	      if( d[i][j] == insertionScore ) isInsertion = true;
+	      else if( d[i][j] == deletionScore ) isDeletion = true;
+	      else if( d[i][j] == substitutionScore ) isSubstitution = true;
+	      else isTransposition = true;
 	      
 	    }
 	    

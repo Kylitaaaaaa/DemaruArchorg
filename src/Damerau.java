@@ -11,8 +11,8 @@ public class Damerau{
 	
 	public static  String 	first;				// source string
 	public static  String 	second;				// comparing string
-	public static  int[][] damerauMatrix; 		
-	public static  Boolean isChecked = false;	// for monitoring threads
+	public static  int[][]  damerauMatrix; 		
+	public static  Boolean  isChecked = false;	// for monitoring threads
 	
 	public static  int m, n;
 	public static  ArrayList<Character> alphabet = new ArrayList<Character>();
@@ -123,7 +123,6 @@ public class Damerau{
             	temp = temp + d[x][y] + "";
             }
             temp = temp + "\n";
-//            System.out.println();
         }
         JFrame parent = new JFrame();
         parent.setVisible(true);
