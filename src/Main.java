@@ -13,14 +13,14 @@ import javax.swing.JButton;
 
 public class Main {
 	
-	private JFrame inputFrame;
-	private JTextField tfSourceInput;
-	private JTextField tfCompareInput;
+	private static JFrame inputFrame;
+	private static JTextField tfSourceInput;
+	private static JTextField tfCompareInput;
 
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public void initialize() {
+	public static void initialize() {
 		inputFrame =  new JFrame();
 		inputFrame.getContentPane().setLayout(null);
 		
@@ -122,5 +122,6 @@ public class Main {
 		Damerau d1 = new Damerau(first, second);
 		d1.tryThread();
 	*/
+		initialize();
 	}
 }

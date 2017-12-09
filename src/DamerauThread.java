@@ -81,6 +81,8 @@ public class DamerauThread implements Runnable{
 	      else if( d[i][j] == substitutionScore ) isSubstitution = true;
 	      else isTransposition = true;
 	      
+	      //write the result onto the output box
+	      
 	    }
 	    
 	    Damerau.setAlphaNum(Damerau.alphabet.indexOf(Damerau.first.charAt(i-1)), i);
