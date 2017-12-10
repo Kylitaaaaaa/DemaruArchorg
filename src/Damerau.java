@@ -5,7 +5,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Damerau{
 	
@@ -49,7 +52,7 @@ public class Damerau{
 				alphaNum.add(0);
 			}
 		
-		System.out.println("alphanum size: " + alphaNum.size());
+//		System.out.println("alphanum size: " + alphaNum.size());
 		
 		for(int i=0; i<alphaNum.size(); i++)
 			alphaNum.set(i, 0);
@@ -63,10 +66,7 @@ public class Damerau{
 		for (int i = 0; i <= n; i++) 
 		    d[0][i] = i;
 		
-//		displayMatrixD();
 		System.out.println("\n");
-//		printAlphabet();
-//		printAlphabetNum();
 	}
 	
 	public void printAlphabet(){
@@ -113,6 +113,9 @@ public class Damerau{
 	static void displayMatrixD(String name)
     {
 		String temp = "";
+		
+		temp = temp + "\t" + first;
+		
         for (int y = 0; y <= n; y++){
             if (y-1 < 0) 
             	temp = temp + "\t";
@@ -124,65 +127,28 @@ public class Damerau{
             }
             temp = temp + "\n";
         }
+        
         JFrame parent = new JFrame();
         parent.setVisible(true);
-        JOptionPane.showMessageDialog(parent, temp, name,  JOptionPane.PLAIN_MESSAGE);
+        
+        JTextArea area=new JTextArea(temp);  
+        area.setBounds(10,30, 200,200);  
+        area.setEditable(false);
+        
+        
+        parent.add(area);  
+        parent.setSize(300,300);  
+        parent.setLayout(null);  
+        parent.setVisible(true);  
+        
+        
+        
+//        JOptionPane.showMessageDialog(parent, temp, name,  JOptionPane.PLAIN_MESSAGE);
     }
 	
 	// to be commented out //
 	void OASDamerau()
     {
-		/*
-        int cost = 1;
-        int deletionScore,
-        	subtractionScore, 
-        	insertionScore,
-        	transpositionScore;
-         
-        damerauMatrix = new int[m+1][n+1];
- 
-        // initialize d
-        for (int i = 0; i <= m; i++){
-        	damerauMatrix[i][0] = i;
-        }
- 
-        for (int i = 0; i <= n; i++){
-        	damerauMatrix[0][i] = i;
-        }
- 
-        for (int i = 1; i <= m; i++)
-        {
-            for (int j = 1; j <= n; j++)
-            {
-                if (first.charAt(i-1) == second.charAt(j-1)){
-                    cost = 0;
-                }
- 
-                deletionScore = damerauMatrix[i-1][j]+1;
-                insertionScore = damerauMatrix[i][j-1]+1;
-                subtractionScore = damerauMatrix[i-1][j-1]+cost;
-                transpositionScore = damerauMatrix[i-2][j-2]+cost;
- 
-                damerauMatrix[i][j] = Math.min(deletionScore,
-                        				Math.min(insertionScore,
-                        						 subtractionScore));
- 
-                if ((i > 1) && (j > 1) && (first.charAt(i-1) == second.charAt(j-2)) 
-                					   && (first.charAt(i-2) == second.charAt(j-1))){
-                    damerauMatrix[i][j] = Math.min(damerauMatrix[i][j], transpositionScore);
-                }
-            }
-        }
- 
-        isChecked = true;
-        System.out.println("distance: " + damerauMatrix[m][n]);
-        displayMatrix();
-        
-        */		
-		//initialize d
-		
-		
-		
 		for (int i = 1; i <= m; i++) {
 			int db = 0;
 		    for (int j = 1; j <= n; j++) {
@@ -217,64 +183,6 @@ public class Damerau{
     }
 	
 	public void tryThread(){
-//		Thread t1 = new Thread(new DamerauThread(), "t1");
-//		Thread t2 = new Thread(new DamerauThread(), "t2");
-//		Thread t3 = new Thread(new DamerauThread(), "t3");
-//		
-//		t1.start();
-//		t2.start();
-//		t3.start();
-		
-		/*
-		List <Thread> tList = new ArrayList <Thread> ();
-		for (int i = 1; i <= m; i++) {
-			//Thread t = new Thread(new DamerauThread(i), "i : " + i);
-			Thread t = new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i);
-			tList.add(t);
-			t.start();
-			
-		}
-		
-		
-		while(tList.size() != 0){
-			for(int i=0; i<tList.size(); i++)
-				if(!tList.get(i).isAlive()){
-					System.out.println("\nTarget : " + i);
-					tList.remove(i);
-					displayMatrixD();
-				}
-		}
-		if(tList.size() ==0){
-			displayMatrixD();
-		}
-		
-		*/
-		
-		System.out.println("m: " + m);
-		System.out.println("n: " + n);
-		
-		/*
-		ExecutorService es = Executors.newCachedThreadPool();
-		for(int i = 1; i <= m; i++){
-			es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, 0, d), "i : " + i));
-		}
-		es.shutdown();
-		try {
-			boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
-			displayMatrixD();
-//			System.out.println("done :  " + i);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		displayMatrixD();
-		System.out.println("distance: " + d[m][n]);
-		
-		*/
-
-		
-		
 		for(int i = 1; i <= m; i++){
 			ExecutorService es = Executors.newCachedThreadPool();
 			for (int j = 1; j <= n; j++) {
@@ -283,7 +191,7 @@ public class Damerau{
 			es.shutdown();
 			try {
 				boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
-//				displayMatrixD();
+				Damerau.displayMatrixD(i+"");
 //				System.out.println("done : " + i);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -292,15 +200,8 @@ public class Damerau{
 			
 		    
 		}
-		
-		
-		
-//		displayMatrixD();
+		displayMatrixD();
 		System.out.println("distance: " + d[m][n]);
-	
-		
-		
-	
 	}
 	
 	
@@ -312,65 +213,6 @@ public class Damerau{
 		alphaNum.set(index, i);
 	}
     
-
-	public int DHDamerau()
-	{
-		 int INF = m+n;
-		 int deletionScore,
-			 	subtractionScore, 
-			 	insertionScore,
-			 	transpositionScore;
-		
-		 damerauMatrix = new int[m+1][n+1];
-		
-		 // initialize d
-		 for (int i = 0; i < m; i++){
-			 damerauMatrix[i+1][1] = i;
-			 damerauMatrix[i+1][0] = INF;
-		 }
-		
-		 for (int i = 0; i < n; i++){
-			 damerauMatrix[1][i+1] = i;
-			 damerauMatrix[0][i+1] = INF;
-		 }
-		
-		 int[] DA = new int[24];
-		
-		 for (int i = 0; i < 24; i++){
-		     DA[i] = 0;
-		 }
-		
-		 for (int i = 1; i < m; i++){
-		     int db = 0;
-		
-		     for (int j = 1; j < n; j++)
-		     {
-		
-		         int i1 = DA[second.indexOf(second.charAt(j-1))];
-		         int j1 = db;
-		         
-		         int d = ((first.charAt(i-1) == first.charAt(j-1)) ? 0 : 1);
-		         if (d == 0) db = j;
-		         
-		         deletionScore = damerauMatrix[i][j]+d;
-		         insertionScore = damerauMatrix[i+1][j]+1;
-		         subtractionScore = damerauMatrix[i][j+1]+1;
-		         transpositionScore = damerauMatrix[i1][j1]+(i-i1-1)+1+(j-j1-1);
-		
-		         damerauMatrix[i+1][j+1] = Math.min(Math.min(deletionScore, 
-		        		 									 insertionScore),
-		        		 					   		Math.min(subtractionScore,
-		        		 					   				 transpositionScore));
-		     }
-		     DA[first.indexOf(first.charAt(i-1))] = i;
-		 }
-		  
-		 isChecked = true;
-		 displayMatrix();
-		 
-	     return damerauMatrix[m][n];
-	}
-
 	public static int[][] getDamerauMatrix() {
 		return damerauMatrix;
 	}
