@@ -256,12 +256,13 @@ public class Damerau{
 		/*
 		ExecutorService es = Executors.newCachedThreadPool();
 		for(int i = 1; i <= m; i++){
-			
-		    es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i));
+			es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, 0, d), "i : " + i));
 		}
 		es.shutdown();
 		try {
 			boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
+			displayMatrixD();
+//			System.out.println("done :  " + i);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,21 +270,21 @@ public class Damerau{
 		
 		displayMatrixD();
 		System.out.println("distance: " + d[m][n]);
-		*/
 		
+		*/
 
 		
 		
 		for(int i = 1; i <= m; i++){
 			ExecutorService es = Executors.newCachedThreadPool();
 			for (int j = 1; j <= n; j++) {
-				es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i));
+				es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, j, d), "i : " + i));
 			}
 			es.shutdown();
 			try {
 				boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
 //				displayMatrixD();
-				System.out.println("done : " + i);
+//				System.out.println("done : " + i);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -294,7 +295,7 @@ public class Damerau{
 		
 		
 		
-		displayMatrixD();
+//		displayMatrixD();
 		System.out.println("distance: " + d[m][n]);
 	
 		
