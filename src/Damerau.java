@@ -63,10 +63,10 @@ public class Damerau{
 		for (int i = 0; i <= n; i++) 
 		    d[0][i] = i;
 		
-		displayMatrixD();
+//		displayMatrixD();
 		System.out.println("\n");
-		printAlphabet();
-		printAlphabetNum();
+//		printAlphabet();
+//		printAlphabetNum();
 	}
 	
 	public void printAlphabet(){
@@ -209,10 +209,11 @@ public class Damerau{
 		    displayMatrixD();
 		  }
 		
-		System.out.println("distance: " + d[m][n]);
+		
 		System.out.println("done \n\n\n");
 		
 		displayMatrixD();
+		System.out.println("distance: " + d[m][n]);
     }
 	
 	public void tryThread(){
@@ -249,10 +250,13 @@ public class Damerau{
 		
 		*/
 		
+		System.out.println("m: " + m);
+		System.out.println("n: " + n);
 		
-		
+		/*
 		ExecutorService es = Executors.newCachedThreadPool();
 		for(int i = 1; i <= m; i++){
+			
 		    es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i));
 		}
 		es.shutdown();
@@ -265,43 +269,39 @@ public class Damerau{
 		
 		displayMatrixD();
 		System.out.println("distance: " + d[m][n]);
-	
-	}
-	
-	public void tryThread2(){
-		List <Thread> tList = new ArrayList <Thread> ();
+		*/
 		
-		for (int i = 1; i <= m; i++) {
-			int db = 0;
-		    for (int j = 1; j <= n; j++) {
-		    	Thread t = new Thread(new TrialThread2(n, alphaNum, alphabet, first, second, i, j, d), "i : " + i);
-				tList.add(t);
-				t.start();
-		    }
-		    alphaNum.set(alphabet.indexOf(first.charAt(i-1)), i);
-		  }
+
 		
+		
+		for(int i = 1; i <= m; i++){
+			ExecutorService es = Executors.newCachedThreadPool();
+			for (int j = 1; j <= n; j++) {
+				es.execute(new Thread(new DamerauThread(n, alphaNum, alphabet, first, second, i, d), "i : " + i));
+			}
+			es.shutdown();
+			try {
+				boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
+//				displayMatrixD();
+				System.out.println("done : " + i);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		    
+		}
+		
+		
+		
+		displayMatrixD();
 		System.out.println("distance: " + d[m][n]);
-		
-		damerauMatrix = d;
-		displayMatrix();
+	
 		
 		
-		
-		while(tList.size() != 0){
-			for(int i=0; i<tList.size(); i++)
-				if(!tList.get(i).isAlive()){
-					System.out.println("\nTarget : " + i);
-					tList.remove(i);
-					damerauMatrix = d;
-					displayMatrix();
-				}
-		}
-		if(tList.size() ==0){
-			damerauMatrix = d;
-			displayMatrix();
-		}
+	
 	}
+	
 	
 	public static void updateD(int i, int j, int val){
 		d[i][j] = val;
