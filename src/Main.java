@@ -1,141 +1,116 @@
+//comment
+
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+
+import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
-import javax.swing.JButton;
 
 public class Main {
 	
-	private static JFrame inputFrame;
-	private static JTextField tfSourceInput;
-	private static JTextField tfCompareInput;
-
+	private static JFrame frame;
+	private static JPanel inputPanel;
+	private static JTextField tfSource;
+	private static JTextField tfComparing;
+	private static JLabel lblTitle;
+	private static JLabel lblSource;
+	private static JLabel lblComparing;
+	private static JButton btnStart;
+	private static JLabel lblError;
+	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public static void initialize() {
-		inputFrame =  new JFrame();
-		inputFrame.getContentPane().setLayout(null);
-		inputFrame.setVisible(true);
-		JLabel lblError = new JLabel("Both fields must be filled out.");
-		JPanel panel = new JPanel();
-		JLabel lblTitle = new JLabel("DAMERAU - LEVENSHTEIN SIMULATOR");
-		JLabel lblSourceInput = new JLabel("Source String");
-		JLabel lblCompareInput = new JLabel("Compare String");
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 467, 164);
+		frame.setResizable(false);
 		
-		panel.setBackground(new Color(255, 182, 193));
-		panel.setBounds(10, 11, 414, 227);
-		inputFrame.getContentPane().add(panel);
-		panel.setLayout(null);
+		inputPanel = new JPanel();
+		inputPanel.setBackground(new Color(250, 250, 210));
+		inputPanel.setLayout(null);
+		frame.getContentPane().add(inputPanel);
 		
-		tfSourceInput = new JTextField();
-		tfSourceInput.setBounds(105, 84, 271, 20);
-		panel.add(tfSourceInput);
-		tfSourceInput.setColumns(10);
-		
-		lblTitle.setForeground(new Color(128, 0, 0));
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblTitle = new JLabel("Damerau-Levenshtein Edit Distance");
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setBounds(0, 23, 414, 14);
-		panel.add(lblTitle);
+		lblTitle.setForeground(new Color(199, 21, 133));
+		lblTitle.setBounds(10, 11, 432, 14);
+		inputPanel.add(lblTitle);
 		
-		tfCompareInput = new JTextField();
-		tfCompareInput.setColumns(10);
-		tfCompareInput.setBounds(105, 111, 271, 20);
-		panel.add(tfCompareInput);
+		lblSource = new JLabel("Source String");
+		lblSource.setBounds(10, 47, 81, 14);
+		inputPanel.add(lblSource);
 		
-		lblSourceInput.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblSourceInput.setBounds(10, 87, 95, 14);
-		panel.add(lblSourceInput);
+		lblComparing = new JLabel("Comparing String");
+		lblComparing.setBounds(10, 72, 107, 14);
+		inputPanel.add(lblComparing);
 		
-		lblCompareInput.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblCompareInput.setBounds(10, 113, 95, 14);
-		panel.add(lblCompareInput);
+		tfSource = new JTextField();
+		tfSource.setBounds(113, 43, 329, 20);
+		inputPanel.add(tfSource);
+		tfSource.setColumns(10);
 		
-		JButton btnStart = new JButton("START");
-		btnStart.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnStart.setForeground(new Color(199, 21, 133));
-		btnStart.setBounds(10, 192, 205, 23);
-		panel.add(btnStart);
+		tfComparing = new JTextField();
+		tfComparing.setColumns(10);
+		tfComparing.setBounds(113, 66, 329, 20);
+		inputPanel.add(tfComparing);
+		
+		btnStart = new JButton("START");
+		btnStart.setBackground(new Color(255, 192, 203));
+		btnStart.setBounds(353, 98, 89, 23);
+		inputPanel.add(btnStart);
+		
+		lblError = new JLabel("Both fields must be filled out.");
+		lblError.setForeground(new Color(255, 0, 0));
+		lblError.setBounds(10, 97, 333, 14);
+		inputPanel.add(lblError);
+		lblError.setVisible(false);
+		
 		btnStart.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!tfSourceInput.getText().isEmpty() || !tfCompareInput.getText().isEmpty()) {
-				Damerau damerauThread = new Damerau(tfSourceInput.getText(), 
-										tfCompareInput.getText());
-				damerauThread.tryThread();
-				lblError.setVisible(false);
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("PRESSED");
+				if(!tfSource.getText().isEmpty() && !tfComparing.getText().isEmpty()) {
+					String first = tfSource.getText();
+					String second = tfComparing.getText();
+					first = first.toUpperCase();
+					second = second.toUpperCase();
+					Damerau damerauThread = new Damerau(first, second);
+					damerauThread.tryThread();
+					lblError.setVisible(false);
 				}
-				else {
-					lblError.setVisible(true);
+				else{ lblError.setVisible(true);
+				System.out.println("NOT WORKING");
 				}
-				
 			}
 			
 		});
-		
-		JButton btnAdd = new JButton("Add Matrix");
-		btnAdd.setBackground(new Color(224, 255, 255));
-		btnAdd.setBounds(315, 193, 89, 23);
-		panel.add(btnAdd);
-		btnAdd.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO: addMatrix function here.
-				
-			}
-			
-		});
-
-		lblError.setForeground(new Color(255, 0, 0));
-		lblError.setBounds(105, 142, 212, 14);	
-		panel.add(lblError);
-		lblError.setVisible(false);
+	}
+	
+	public Main() {
+		initialize();
 	}
 	
 	public static void main(String[] args){
-	
-		Scanner sc=new Scanner(System.in);
-//		System.out.print("First word: ");
-//		String first = sc.next();
 		
-//		System.out.print("Second word: ");
-//		String second = sc.next();
-		
-		String first = "mom";
-		String second = "dad";
-		first = first.toUpperCase();
-		second = second.toUpperCase();
-		System.out.println("first: " + first);
-		System.out.println("second: " + second);
-		String temp = first;
-		first = second;
-		second = temp;
-		
-		long startTime = System.currentTimeMillis();
-		//serial damerau
-		/*
-		Damerau d2 = new Damerau(first, second);
-		d2.OASDamerau();
-		*/
-		
-		//parallel damerau
-		Damerau d1 = new Damerau(first, second);
-		d1.tryThread();
-		
-		long endTime   = System.currentTimeMillis();
-		long totalTime = endTime - startTime;
-		System.out.println("time: " + totalTime);
-	
-//		initialize();
+		System.out.println("RUNNING");
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main window = new Main();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+				
 	}
 }

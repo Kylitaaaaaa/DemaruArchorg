@@ -7,8 +7,13 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import java.awt.Font;
+
+import com.sun.prism.paint.Color;
 
 public class Damerau{
 	
@@ -23,6 +28,36 @@ public class Damerau{
 	
 	public static  int [][] d;
 	
+	// UI Part
+		private static JFrame frame;
+		private static JPanel inputPanel;
+		private static JTextArea textArea;
+		private static JLabel lblTitle;
+	
+	public static void initialize() {
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 349, 326);
+		frame.setResizable(false);
+		
+		inputPanel = new JPanel();
+//		inputPanel.setBackground(new Color(250, 250, 210));
+		inputPanel.setLayout(null);
+		frame.getContentPane().add(inputPanel);
+		
+		textArea = new JTextArea();
+//		textArea.setForeground(new Color(128, 0, 0));
+		textArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+		textArea.setBounds(10, 36, 321, 253);
+		inputPanel.add(textArea);
+		
+		lblTitle = new JLabel("Matrix Display");
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 11));
+//		lblTitle.setForeground(new Color(199, 21, 133));
+		lblTitle.setBounds(10, 11, 321, 14);
+		inputPanel.add(lblTitle);
+	}
+	
 	
 	public Damerau(String first, String second){
 		if ((first.length() > 0 || !first.isEmpty())  || 
@@ -33,7 +68,7 @@ public class Damerau{
 				this.m = first.length();
 				this.n = second.length();
 	        }
-		
+		initialize();
 		prepare();
 		
 		
@@ -112,34 +147,23 @@ public class Damerau{
 	
 	static void displayMatrixD(String name)
     {
-		String temp = "";
+		System.out.println("RUNNING");
+		frame.setVisible(true);
+		String output = new String();
 		
-		temp = temp + "\t" + first;
-		
+        output = output + "   " + first + "\n";
         for (int y = 0; y <= n; y++){
-            if (y-1 < 0) 
-            	temp = temp + "\t";
-            else 
-            	temp = temp + second.charAt(y-1) + "";
+            if (y-1 < 0) output = output + "  "; 
+            else output = output + second.charAt(y-1) + " ";
             
             for (int x = 0; x <= m; x++){
-            	temp = temp + d[x][y] + "";
+            	output = output + d[x][y];
             }
-            temp = temp + "\n";
+            output = output + "\n";
         }
         
-        JFrame parent = new JFrame();
-        parent.setVisible(true);
-        
-        JTextArea area=new JTextArea(temp);  
-        area.setBounds(10,30, 200,200);  
-        area.setEditable(false);
-        
-        
-        parent.add(area);  
-        parent.setSize(300,300);  
-        parent.setLayout(null);  
-        parent.setVisible(true);  
+        textArea.setText(output);
+        textArea.setEditable(false);
         
         
         
@@ -191,7 +215,7 @@ public class Damerau{
 			es.shutdown();
 			try {
 				boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
-				Damerau.displayMatrixD(i+"");
+				Damerau.displayMatrixD();
 //				System.out.println("done : " + i);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -200,8 +224,11 @@ public class Damerau{
 			
 		    
 		}
-		displayMatrixD();
-		System.out.println("distance: " + d[m][n]);
+		
+		
+		displayMatrixD("final");
+		JOptionPane.showMessageDialog(frame, "Distance: " + d[m][n]);
+//		System.out.println("distance: " + d[m][n]);
 	}
 	
 	
